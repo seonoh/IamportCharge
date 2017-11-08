@@ -1,0 +1,72 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+    <style>
+    body {
+        background:#D1B2FF;
+    }
+</style>
+    <!-- jquery 설치 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- iampoert 설치 -->
+    <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.2.js"></script>
+    <script>
+    // 문서가 전체가 로딩되었다 => HTML이 DOM(Document Object Model) 형태로 메모리에 로드 되었다 => 시작점!!
+    // $("CSS 셀렉터") => 요소를 찾는 jquery의 방법
+    var IMP = window.IMP;
+    $(document).ready(function(){
+        // 가맹점 식별 코드 초기화
+        IMP.init('imp97732821');
+    });
+    // 결제 수행 함수
+    function paynow(itemName, itemAmount)
+    {
+        IMP.request_pay({
+            pg :            'LGU+',
+            pay_method :    'card',
+            merchant_uid :  'merchant_' + new Date().getTime(),
+            name :          itemName,   //'주문명:결제테스트',
+            amount :        itemAmount, //14000,
+            buyer_email :   'iamport@siot.do',
+            buyer_name :    '구매자이름',
+            buyer_tel :     '010-1234-5678',
+            buyer_addr :    '서울특별시 강남구 삼성동',
+            buyer_postcode :'123-456'
+            app_scheme:'iamporttest',
+            m_redirect_url:'http://13.124.94.151:3000'
+        }, function(rsp) {
+            if ( rsp.success ) {
+                var msg = '결제가 완료되었습니다.';
+                msg += '고유ID : ' + rsp.imp_uid;
+                msg += '상점 거래ID : ' + rsp.merchant_uid;
+                msg += '결제 금액 : ' + rsp.paid_amount;
+                msg += '카드 승인번호 : ' + rsp.apply_num;
+            } else {
+                var msg = '결제에 실패하였습니다.';
+                msg += '에러내용 : ' + rsp.error_msg;
+            }
+            // javascript =-> java로 전달 :
+            window.pay.showResult(msg);
+            //alert(msg);
+        });
+    }
+</script>
+</head>
+<body>
+hi
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
